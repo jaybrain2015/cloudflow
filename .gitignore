@@ -28,3 +28,5 @@ storage/framework/views/*
 *.swpapp-learning-throwaway/
 app-learning-throwaway/
 snipeit-image/src/
+snipeit-image/docker-compose.dev.yml
+snipeit-image/push.sh
