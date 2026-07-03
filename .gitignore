@@ -27,4 +27,4 @@ storage/framework/views/*
 .vscode/
 *.swpapp-learning-throwaway/
 app-learning-throwaway/
-.gitignore
+snipeit-image/src/
