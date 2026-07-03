@@ -1,0 +1,28 @@
+# ---- Secrets: NEVER commit ----
+.env
+*.env
+*.pem
+*.key
+terraform.tfvars
+*.auto.tfvars
+
+# ---- Terraform state & local ----
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+crash.log
+
+# ---- PHP / Laravel ----
+vendor/
+node_modules/
+bootstrap/cache/*.php
+storage/logs/*.log
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+
+# ---- OS / editor ----
+.DS_Store
+.vscode/
+*.swp

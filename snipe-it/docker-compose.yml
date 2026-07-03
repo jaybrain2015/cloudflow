@@ -1,0 +1,31 @@
+services:
+  snipeit:
+    image: snipe/snipe-it:v8.5.0
+    ports:
+      - "8080:80"
+    env_file:
+      - .env
+    volumes:
+      - snipe_uploads:/var/lib/snipeit
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: snipeit
+      MYSQL_USER: snipeit
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: rootsecret
+    volumes:
+      - snipe_mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-prootsecret"]
+      interval: 5s
+      timeout: 5s
+      retries: 10  
+
+volumes:
+  snipe_uploads:
+  snipe_mysql:
