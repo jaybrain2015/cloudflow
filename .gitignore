@@ -25,4 +25,6 @@ storage/framework/views/*
 # ---- OS / editor ----
 .DS_Store
 .vscode/
-*.swp
+*.swpapp-learning-throwaway/
+app-learning-throwaway/
+.gitignore
