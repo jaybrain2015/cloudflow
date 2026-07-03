@@ -22,3 +22,8 @@ output "ecr_repository_url" {
   description = "URL of the Snipe-IT ECR repository"
   value       = aws_ecr_repository.snipeit.repository_url
 }
+
+output "github_ci_role_arn" {
+  description = "IAM role ARN for GitHub Actions to assume"
+  value       = aws_iam_role.github_ci.arn
+}
