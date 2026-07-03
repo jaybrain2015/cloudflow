@@ -149,3 +149,16 @@ resource "aws_ecr_repository" "snipeit" {
     Name = "cloudflow-snipeit"
   }
 }
+
+resource "aws_ecr_repository" "guestbook" {
+  name                 = "cloudflow/guestbook"
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+
+  tags = {
+    Name = "cloudflow-guestbook"
+  }
+}

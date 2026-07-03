@@ -1,20 +1,19 @@
-name: Build and Push Snipe-IT Image
+name: Build and Push Guestbook Image
 
 on:
   push:
     branches: [main]
     paths:
-      - 'snipeit-image/**'
+      - 'guestbook/**'
       - '.github/workflows/build-and-push.yml'
 
-# OIDC needs this permission to request the token
 permissions:
   id-token: write
   contents: read
 
 env:
   AWS_REGION: eu-north-1
-  ECR_REPOSITORY: cloudflow/snipeit
+  ECR_REPOSITORY: cloudflow/guestbook
   ROLE_ARN: arn:aws:iam::031673483150:role/cloudflow-github-ci
 
 jobs:
@@ -23,11 +22,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Clone Snipe-IT source
-        run: |
-          git clone --depth 1 --branch v8.5.0 \
-            https://github.com/grokability/snipe-it.git snipeit-image/src
 
       - name: Configure AWS credentials via OIDC
         uses: aws-actions/configure-aws-credentials@v4
@@ -45,6 +39,6 @@ jobs:
         run: |
           docker build -t $REGISTRY/$ECR_REPOSITORY:${{ github.sha }} \
                        -t $REGISTRY/$ECR_REPOSITORY:latest \
-                       snipeit-image/
+                       guestbook/
           docker push $REGISTRY/$ECR_REPOSITORY:${{ github.sha }}
           docker push $REGISTRY/$ECR_REPOSITORY:latest
