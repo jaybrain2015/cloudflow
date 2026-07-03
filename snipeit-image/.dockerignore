@@ -1,0 +1,4 @@
+src/.git
+src/.env
+src/vendor
+*.md
