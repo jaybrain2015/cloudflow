@@ -57,7 +57,6 @@ data "aws_iam_policy_document" "ecr_push" {
       "ecr:GetDownloadUrlForLayer",
     ]
     resources = [
-      aws_ecr_repository.snipeit.arn,
       aws_ecr_repository.guestbook.arn,
     ]
   }
