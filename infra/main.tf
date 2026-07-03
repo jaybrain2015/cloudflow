@@ -104,6 +104,7 @@ resource "aws_instance" "nat" {
   subnet_id              = aws_subnet.public.id
   vpc_security_group_ids = [aws_security_group.nat.id]
   source_dest_check      = false
+  key_name = aws_key_pair.cloudflow.key_name
 
   user_data = <<-EOF
     #!/bin/bash
@@ -140,6 +141,7 @@ resource "aws_route_table_association" "private" {
 resource "aws_ecr_repository" "snipeit" {
   name                 = "cloudflow/snipeit"
   image_tag_mutability = "MUTABLE"
+  force_delete         = true 
 
   image_scanning_configuration {
     scan_on_push = true
@@ -153,6 +155,7 @@ resource "aws_ecr_repository" "snipeit" {
 resource "aws_ecr_repository" "guestbook" {
   name                 = "cloudflow/guestbook"
   image_tag_mutability = "MUTABLE"
+  force_delete         = true 
 
   image_scanning_configuration {
     scan_on_push = true
@@ -161,4 +164,52 @@ resource "aws_ecr_repository" "guestbook" {
   tags = {
     Name = "cloudflow-guestbook"
   }
+}
+
+resource "aws_subnet" "private_b" {
+  vpc_id            = aws_vpc.cloudflow.id
+  cidr_block        = "10.0.3.0/24"
+  availability_zone = "eu-north-1b"
+
+  tags = {
+    Name = "cloudflow-private-2"
+  }
+}
+
+resource "aws_db_subnet_group" "cloudflow" {
+  name       = "cloudflow-db-subnet-group"
+  subnet_ids = [aws_subnet.private.id, aws_subnet.private_b.id]
+
+  tags = {
+    Name = "cloudflow-db-subnet-group"
+  }
+}
+
+resource "aws_security_group" "db" {
+  name        = "cloudflow-db-sg"
+  description = "Allow MySQL only from within the VPC"
+  vpc_id      = aws_vpc.cloudflow.id
+
+  ingress {
+    description = "MySQL from inside the VPC"
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = [var.vpc_cidr]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "cloudflow-db-sg"
+  }
+}
+resource "aws_key_pair" "cloudflow" {
+  key_name   = "cloudflow-key-tf"
+  public_key = file("~/Downloads/cloudflow-key.pub")
 }
